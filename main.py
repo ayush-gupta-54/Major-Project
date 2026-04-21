@@ -80,7 +80,8 @@ def main():
         return
 
     # 4. Init model
-    model = GNN(in_channels=data.num_nodes, hidden_channels=16, out_channels=8)
+    # data.x.size(1) will be 384
+    model = GNN(in_channels=data.x.size(1), hidden_channels=16, out_channels=8)
 
     # 5. Train
     print("\nTraining...\n")
