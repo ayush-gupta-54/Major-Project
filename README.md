@@ -1,109 +1,78 @@
-# 🧠 Semantic Codebase Cartographer
+# Semantic Codebase Cartography using GNNs
 
-A Streamlit-based tool to **analyze, understand, and visualize Python codebases** using graph-based representations and multi-relational modeling.
-
----
-
-## 🚀 Features
-
-* 🔍 Parses Python codebase automatically
-* 🧩 Builds function-level dependency graphs
-* 🌐 Visualizes relationships interactively
-* 🧠 Uses graph-based logic for structural + semantic insights
-* ⚡ Helps understand large projects quickly
+Parses a Python file, builds a function call graph, trains a GNN on it, and predicts missing dependencies between functions.
 
 ---
 
-## 🛠️ Tech Stack
+## Project Structure
 
-* Python
-* Streamlit
-* NetworkX
-* PyVis
-* PyTorch (optional / if used)
-* NumPy
-
----
-
-## 📦 Installation
-
-```bash
-pip install -r requirements.txt
+```
+.
+├── data/sample.py       # Example input file
+├── parser.py            # AST parser — extracts functions and calls
+├── graph.py             # Builds PyG graph from parsed output
+├── model.py             # 2-layer GCN
+├── train.py             # Link prediction training loop
+├── main.py              # Runs full pipeline + visualizations
+└── requirements.txt
 ```
 
 ---
 
-## ▶️ How to Run
+## Quickstart
 
-1. Clone or download the repository
-
-   ```bash
-   git clone https://github.com/your-username/Semantic-Codebase-Cartographer.git
-   cd Semantic-Codebase-Cartographer
-   ```
-
-2. Install dependencies
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Run the Streamlit app
-
-   ```bash
-   python -m streamlit run app.py
-   ```
-
-4. Open your browser and go to:
-   👉 http://localhost:8501
+```bash
+pip install -r requirements.txt
+python main.py
+```
 
 ---
 
-## 💡 Usage
+## What It Does
 
-* Upload any `.py` file from your system
-* The tool will:
-
-  * Extract functions
-  * Build dependency graph
-  * Visualize relationships
-
----
-
-## 📊 Example Output
-
-* Function nodes
-* Call relationships (edges)
-* Interactive graph visualization
+1. Parses `data/sample.py` using `ast` — finds functions and who calls whom
+2. Builds a directed graph — functions are nodes, calls are edges
+3. Trains a 2-layer GCN to learn embeddings for each function
+4. Predicts likely missing links using dot product scoring + BCE loss
+5. Outputs `call_graph.png`, `embeddings.png`, and top predicted links in terminal
 
 ---
 
-## ⚠️ Notes
+## Requirements
 
-* Make sure Python is installed (3.8+)
-* If `streamlit` command doesn't work, use:
-
-  ```bash
-  python -m streamlit run app.py
-  ```
-
----
-
-## 🔮 Future Improvements
-
-* Support multi-file projects
-* Advanced semantic embeddings
-* Better UI/UX enhancements
-* Export graph as image / JSON
+```
+torch
+torch-geometric
+networkx
+matplotlib
+scikit-learn
+```
 
 ---
 
-## 👩‍💻 Author
+## Limitations
 
-Aarzoo Nuha
+- Single file only
+- No semantic understanding (one-hot features only)
+- Only call edges — no imports, inheritance, or variable usage
+- No evaluation split — trains and scores on the same graph
+- Not tested on real repositories
 
 ---
 
-## ⭐ If you like this project
+## Roadmap
 
-Give it a star ⭐ on GitHub — it helps a lot!
+| Stage | Goal |
+|---|---|
+| 1 | Fix AST coverage (method calls, aliased imports) ✅ |
+| 2 | Multi-file parsing |
+| 3 | Heterogeneous graph (imports, inheritance, usage edges) |
+| 4 | R-GCN for relation-aware message passing |
+| 5 | Code embeddings (CodeBERT) instead of one-hot |
+| 6 | Scale to real repositories |
+
+---
+
+## License
+
+MIT
