@@ -73,6 +73,3 @@ scikit-learn
 
 ---
 
-## License
-
-MIT
